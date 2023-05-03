@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjetoAA</title>
+</head>
+<body>
+    <!-- CRIANDO OS ELEMENTOS DA MINHA PÁGINA -->
+    <center><h1>ProjetoAA</h1>
+    <h2><button id="cad">Conferir</button></h2>
+    <h3><button id="list">Lista</button></h3>
+    <h4><button id="test">Teste da Peça</button></h4></center>
+</body>
+<style>
+    /* MUDANDO O VISUAL DO PROTÓTIPO */
+    body{
+        background-color: green;
+    }
+    h1{
+        color: white;
+        font-style: italic;
+        font-size: 50px;
+    }
+    #cad {
+        background-color: rgb(4, 185, 4);
+        color: white;
+        margin-top: 0%;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #list {
+        background-color: rgb(4, 185, 4);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #test {
+        background-color: rgb(4, 185, 4);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    //PARA CADA BOTÃO QUE EU COLOQUEI NA MINHA PÁGINA EU PUXEI UM ARQUIVO HTML DA MESMA PASTA
+    var button = document.getElementById("cad");
+    button.addEventListener("click", function(){
+    window.location.href = 'ConferirAA.html';
+    }) 
+    var Lista = document.getElementById("list");
+    Lista.addEventListener("click", function(){
+    window.location.href = 'ListaAA.html';
+    })
+    var Teste = document.getElementById("test");
+    Teste.addEventListener("click", function(){
+        window.location.href ='TesteAA.html'
+    })
+</script>
+</html>

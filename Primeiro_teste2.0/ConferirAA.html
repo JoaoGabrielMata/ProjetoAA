@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conferir</title>
+</head>
+<body>
+    <center><h1>Peças no Sistema</h1>
+    <input type="text" id="Op">
+    <input type="date" id="data">
+    <h2><button id="ok">Confirmar</button></h2>
+    <h2><button id="back">Voltar</button></h2>
+    <h3><textarea name="Produto" id="resultado" cols="17" rows="8"></textarea></h3></center>
+</body>
+<style>
+    h1{
+        color: white;
+        font-style: italic;
+        font-size: 50px;
+    }
+    body{
+        background-color: green;
+    }
+    #ok {
+        background-color: rgb(4, 185, 4);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #back {
+        background-color: rgb(172, 67, 67);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    h3{
+        size: 50px;
+    }
+</style>
+<script>
+    function Ordem_de_produção(){
+        let ordem = document.getElementById("Op").value;
+        let data = document.getElementById("data").value;//DEFININDO OS ELEMENTOS BÁSICOS DO MEU OBJETO PARA COMPARAR COM OS DA LISTA JSON
+
+        var saida = ("Sua Op é:" +ordem + "  ela foi lançada em:" +data +"   ");//ESCREVENDO A FRASE QUE VAI APARECER O MEU CAMPO
+        let produto = saida; //COLOCANDO UM VALOR NO MEU PRODUTO
+        var campo = document.getElementById("resultado").value; //CRIANDO MEU CAMPO
+        resultado.value = produto; //LINKANDO O RESULTADO COM O PRODUTO
+    }
+
+    var listaItensJSON = localStorage.getItem('lista'); // BUSCANDO UMA VARIAVEL QUE FOI SALVA NA NUVEM
+    if(listaItensJSON !== null){
+       var listaItens = JSON.parse(listaItensJSON);//VERIFICANDO SE TEM ALGO SALVO, CASO TENHA EU TRASFORMO MINHA VÁRIAVEL NOVAMENTE
+    }
+    
+    var confirm =document.getElementById("ok"); 
+    confirm.addEventListener("click", function(){
+        Ordem_de_produção();
+    }) 
+    var Voltar =document.getElementById("back");
+    Voltar.addEventListener("click", function(){
+    window.location.href = 'ProjetoAA.html';
+    }) 
+    
+</script>
+</html>

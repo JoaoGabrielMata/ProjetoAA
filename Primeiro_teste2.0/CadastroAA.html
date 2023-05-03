@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cadastro de peças</title>
+</head>
+<body>
+    <center><h1>Cadastro de Produtos</h1>
+    <h2><input type="text" id="Op" value="Digite sua Ordem de Produção">
+    <input type="date" id="data">
+    <input type="number" id="quant" value="0">
+    <input type="text" id="sit" value="Qual a situação delas ?"></h2>
+    <h3><button onclick="adicionarItem()">Cadastrar</button></h3>
+    <h4><button onclick="Voltar()">Voltar</button></h4>
+    <ul id="lista"></ul></center> <!--CRIANDO UM ELEMENTO ARRAY PARA ELE ARMAZENAR MINHA LISTA -->
+</body>
+<style>
+    h1{
+        color: white;
+        font-style: italic;
+        font-size: 50px;
+    }
+    body{
+        background-color: green;
+    }
+    #lista li{
+        background-color: green;
+        color: white;
+        size: 60px;
+    }
+    button{
+        background-color: rgb(4,185,4);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    //CRIAÇÃO DA FORMATAÇÃO PADRÃO DOS MEUS OBJETOS
+    var itens = [];
+    var lista = document.getElementById("lista");
+    var produ = document.getElementById("Op");
+    var dia = document.getElementById("data");
+    var quant = document.getElementById("quant");
+    var situa = document.getElementById("sit");
+
+    function adicionarItem(){
+        //BUSCANDO OS ELEMENTOS QUE EU COLOQUEI COMO PADRÃO
+        var Op = produ.value.trim();
+        var quantidade = parseInt(quant.value.trim());
+        var data = dia.value;
+        var como = situa.value.trim();
+
+        if (Op !== "" && !isNaN(quantidade) && quantidade>0 && como !==""){ //CONFERINDO SE O INPUT NÃO ESTÁ VAZIO
+            var novoItem = { //CONSTRUINDO MEU OBJETO
+                Op : Op,
+                quantidade : quantidade,
+                data : data,
+                como: como
+            }
+            itens.push(novoItem); //ENVIANDO ELE PARA A LISTA
+            var item = document.createElement("li");
+            //DEFININDO COMO CADA OBJETO VAI APARECER NA MINHA LISTA 
+            item.appendChild(document.createTextNode("Produto na Op: "+Op + "/ foi lançada na data de : " +data + "/ foi testado: " +quantidade +" peças " +"/ e a situação delas é: " +como)); 
+            lista.appendChild(item);
+            Op.value = "";
+            quantidade.value ="";
+            data.value ="";
+            como.value="";
+            
+        }
+    }
+
+    var listaItensJSON = JSON.stringify(itens); //CRIANDO UM ARMAZENAMENTO NA NUVEM PARA TENTAR SALVAR OS OBJETOS
+    localStorage.setItem('lista', listaItensJSON); //DEFININDO UMA CHAVE PARA PODER ACESSAR EM OUTRO ARQUIVO
+    
+    function Voltar(){
+        window.location.href = 'ListaAA.html';
+    }
+</script>
+</html>

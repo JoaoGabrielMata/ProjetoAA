@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista</title>
+</head>
+<body>
+    <center><h1>Lista de Produtos</h1>
+    <h2><button id="cadastro">cadastrar</button></h2>
+    <h3><button id="back">Voltar</button></h3></center>
+</body>
+<style>
+    body{
+        background-color: green;
+    }
+    h1{
+        color: white;
+        font-style: italic;
+        font-size: 50px;
+    }
+    #cadastro{
+        background-color: rgb(4,185,4);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #back{
+        background-color: rgb(172, 67, 67);
+        color: white;
+        margin-top: 1%;
+        padding: 12px 32px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<script>
+    var cadast = document.getElementById("cadastro")
+    cadast.addEventListener("click", function(){
+        window.location.href = 'CadastroAA.html';
+    })
+    var voltar = document.getElementById("back")
+    voltar.addEventListener("click", function(){
+        window.location.href = 'ProjetoAA.html';
+    })
+</script>
+</html>
