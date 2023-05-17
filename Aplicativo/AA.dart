@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showMessage,
-        tooltip: 'Exibir mensagem',
+        tooltip: 'Funciona',
         child: Icon(Icons.message),
       ),
     );
