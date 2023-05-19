@@ -55,11 +55,6 @@
         var campo = document.getElementById("resultado").value; //CRIANDO MEU CAMPO
         resultado.value = produto; //LINKANDO O RESULTADO COM O PRODUTO
     }
-
-    var listaItensJSON = localStorage.getItem('lista'); // BUSCANDO UMA VARIAVEL QUE FOI SALVA NA NUVEM
-    if(listaItensJSON !== null){
-       var listaItens = JSON.parse(listaItensJSON);//VERIFICANDO SE TEM ALGO SALVO, CASO TENHA EU TRASFORMO MINHA VÁRIAVEL NOVAMENTE
-    }
     
     var confirm =document.getElementById("ok"); 
     confirm.addEventListener("click", function(){

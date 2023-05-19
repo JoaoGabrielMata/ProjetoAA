@@ -33,6 +33,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _troca(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,5 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.message),
       ),
     );
+    floatingActionButton: floatingActionButton(
+      onPressed: 
+    )
   }
 }
