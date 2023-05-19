@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Projeto AA',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.black,
       ),
       home: MyHomePage(title: 'teste Projeto AA'),
     );
@@ -29,14 +29,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _showMessage() {
     setState(() {
-      _message = 'Olá, mundo!';
+      _message = 'Funciona';
     });
   }
 
-  void _troca(){
-
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showMessage,
-        tooltip: 'Funciona',
+        tooltip: 'Pressione',
         child: Icon(Icons.message),
       ),
     );
@@ -68,3 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
     )
   }
 }
+ //void _troca(){
+    //navigator(;
+      //troca tela do aplicativo(Tela 2),
+    //)
+  //}
