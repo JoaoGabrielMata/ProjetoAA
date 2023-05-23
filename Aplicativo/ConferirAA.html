@@ -9,7 +9,6 @@
 <body>
     <center><h1>Peças no Sistema</h1>
     <input type="text" id="Op">
-    <input type="date" id="data">
     <h2><button id="ok">Confirmar</button></h2>
     <h2><button id="back">Voltar</button></h2>
     <h3><textarea name="Produto" id="resultado" cols="17" rows="8"></textarea></h3></center>
@@ -47,8 +46,7 @@
 </style>
 <script>
     function Ordem_de_produção(){
-        let ordem = document.getElementById("Op").value;
-        let data = document.getElementById("data").value;//DEFININDO OS ELEMENTOS BÁSICOS DO MEU OBJETO PARA COMPARAR COM OS DA LISTA JSON
+        let ordem = document.getElementById("Op").value;//DEFININDO OS ELEMENTOS BÁSICOS DO MEU OBJETO PARA COMPARAR COM OS DA LISTA JSON
 
         var saida = ("Sua Op é:" +ordem + "  ela foi lançada em:" +data +"   ");//ESCREVENDO A FRASE QUE VAI APARECER O MEU CAMPO
         let produto = saida; //COLOCANDO UM VALOR NO MEU PRODUTO
