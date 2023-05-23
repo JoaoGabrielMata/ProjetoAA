@@ -9,11 +9,10 @@
 <body>
     <center><h1>Cadastro de Produtos</h1>
     <h2><input type="text" id="Op" value="Digite sua Ordem de Produção">
-    <input type="date" id="data">
-    <input type="number" id="quant" value="0">
-    <input type="text" id="sit" value="Qual a situação delas ?"></h2>
+    <input type="number" id="quant" value="0"></h2>
     <h3><button onclick="adicionarItem()">Cadastrar</button></h3>
-    <h4><button onclick="Voltar()">Voltar</button></h4>
+    <h4><button onclick="Voltar()">Voltar</button>
+    <button onclick="teste()">Teste de Peça</button></h4>
     <ul id="lista"></ul></center> <!--CRIANDO UM ELEMENTO ARRAY PARA ELE ARMAZENAR MINHA LISTA -->
 </body>
 <style>
@@ -45,9 +44,7 @@
     var itens = [];
     var lista = document.getElementById("lista");
     var produ = document.getElementById("Op");
-    var dia = document.getElementById("data");
     var quant = document.getElementById("quant");
-    var situa = document.getElementById("sit");
 
     function adicionarItem(){
         //BUSCANDO OS ELEMENTOS QUE EU COLOQUEI COMO PADRÃO
@@ -59,25 +56,24 @@
         if (Op !== "" && !isNaN(quantidade) && quantidade>0 && como !==""){ //CONFERINDO SE O INPUT NÃO ESTÁ VAZIO
             var novoItem = { //CONSTRUINDO MEU OBJETO
                 Op : Op,
-                quantidade : quantidade,
-                data : data,
-                como: como
+                quantidade : quantidade
             }
             itens.push(novoItem); //ENVIANDO ELE PARA A LISTA
             var item = document.createElement("li");
             //DEFININDO COMO CADA OBJETO VAI APARECER NA MINHA LISTA 
-            item.appendChild(document.createTextNode("Produto na Op: "+Op + "/ foi lançada na data de : " +data + "/ foi testado: " +quantidade +" peças " +"/ e a situação delas é: " +como)); 
+            item.appendChild(document.createTextNode("Produto na Op: "+Op +"foi testado: " +quantidade)); 
             lista.appendChild(item);
             Op.value = "";
             quantidade.value ="";
-            data.value ="";
-            como.value="";
-            
         }
     }
 
+    function teste(){
+        window.location.href = 'TesteAA.html';
+    }
+
     function Voltar(){
-        window.location.href = 'ListaAA.html';
+        window.location.href = 'ProjetoAA.html';
     }
 </script>
 </html>

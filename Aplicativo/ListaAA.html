@@ -8,7 +8,7 @@
 </head>
 <body>
     <center><h1>Lista de Produtos</h1>
-    <h2><button id="cadastro">cadastrar</button></h2>
+    <h2><button id="conferir">conferir peça</button></h2>
     <h3><button id="back">Voltar</button></h3></center>
 </body>
 <style>
@@ -20,7 +20,7 @@
         font-style: italic;
         font-size: 50px;
     }
-    #cadastro{
+    #conferir{
         background-color: rgb(4,185,4);
         color: white;
         margin-top: 1%;
@@ -40,9 +40,9 @@
     }
 </style>
 <script>
-    var cadast = document.getElementById("cadastro")
+    var cadast = document.getElementById("conferir")
     cadast.addEventListener("click", function(){
-        window.location.href = 'CadastroAA.html';
+        window.location.href = 'ConferirAA.html';
     })
     var voltar = document.getElementById("back")
     voltar.addEventListener("click", function(){

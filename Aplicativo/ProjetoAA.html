@@ -9,9 +9,8 @@
 <body>
     <!-- CRIANDO OS ELEMENTOS DA MINHA PÁGINA -->
     <center><h1>ProjetoAA</h1>
-    <h2><button id="cad">Conferir</button></h2>
-    <h3><button id="list">Lista</button></h3>
-    <h4><button id="test">Teste da Peça</button></h4></center>
+    <h2><button id="cad">Cadastro</button></h2>
+    <h3><button id="list">Lista</button></h3></center>
 </body>
 <style>
     /* MUDANDO O VISUAL DO PROTÓTIPO */
@@ -41,29 +40,17 @@
         border-radius: 5px;
         cursor: pointer;
     }
-    #test {
-        background-color: rgb(4, 185, 4);
-        color: white;
-        margin-top: 1%;
-        padding: 12px 5px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
 </style>
 <script>
     //PARA CADA BOTÃO QUE EU COLOQUEI NA MINHA PÁGINA EU PUXEI UM ARQUIVO HTML DA MESMA PASTA
     var button = document.getElementById("cad");
     button.addEventListener("click", function(){
-    window.location.href = 'ConferirAA.html';
+    window.location.href = 'CadastroAA.html';
     }) 
     var Lista = document.getElementById("list");
     Lista.addEventListener("click", function(){
     window.location.href = 'ListaAA.html';
     })
-    var Teste = document.getElementById("test");
-    Teste.addEventListener("click", function(){
-        window.location.href ='TesteAA.html'
-    })
+    
 </script>
 </html>
