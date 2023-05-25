@@ -1,5 +1,6 @@
 float segundos;
 float milli;
+
 void setup() {
   milli = millis();
   segundos = milli/1000;
@@ -10,24 +11,30 @@ void setup() {
 }
 
 void loop() {
-  //if(digitalRead(23) == 0){
-    //milli = 0;
-    // if(segundos < 2){
-      //if(digitalRead(4 == 1)){
-        //joga no banco de dados que a peça está boa;
-      //}
-      //else{
-        //joga no banco de dados que a peça apresenta defeitos;
-      //}
-   // }
-  //}
+  Serial.println(segundos);
+  if (digitalRead(23) == 0){
+    segundos = 0;
+  }
+
+  if(digitalRead(4)==1){
+    if(segundos < 5){
+      digitalWrite(22,1);
+      delay(3000);
+      digitalWrite(22,0);
+      delay(2000);
+    }
+    else{
+      digitalWrite(22,0);
+    }
+  }
+  
 
   
-  if(digitalRead(4)==1){
-    digitalWrite(22,1);
-    Serial.println(digitalRead(4));
-  } 
-  else if(digitalRead(4)==0){
-    digitalWrite(22,0);
-  }
+  //if(digitalRead(4)==1){
+    //digitalWrite(22,1);
+    //Serial.println(digitalRead(4));
+ // } 
+  //else if(digitalRead(4)==0){
+    //digitalWrite(22,0);
+  //}
 }
