@@ -1,4 +1,5 @@
-float segundos;
+//Sistema de contagem
+float segundos; 
 float milli;
 
 void setup() {
@@ -11,11 +12,13 @@ void setup() {
 }
 
 void loop() {
+  //Verificando se o sistema funciona ou não
   Serial.println(segundos);
   if (digitalRead(23) == 0){
     segundos = 0;
   }
 
+  //Fazendo o teste da peça
   if(digitalRead(4)==1){
     if(segundos < 5){
       digitalWrite(22,1);
