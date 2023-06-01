@@ -1,2 +1,2 @@
 # ProjetoAA
-Projeto AutoAnalitico, projeto que estou trabalhando no momento, inclusive não tá funcionando
+Projeto AutoAnalitico, projeto que estou trabalhando no momento.
