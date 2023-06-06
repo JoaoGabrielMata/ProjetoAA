@@ -65,8 +65,3 @@ class _MyHomePageState extends State<MyHomePage> {
     )
   }
 }
- //void _troca(){
-    //navigator(;
-      //troca tela do aplicativo(Tela 2),
-    //)
-  //}

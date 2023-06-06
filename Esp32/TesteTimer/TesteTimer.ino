@@ -14,17 +14,31 @@ void setup() {
 }
 
 void loop() {
+
+ //Detecta peças
   if (digitalRead(23) == 1) {  // Se o sensor identificar alguma coisa
-    digitalWrite(22, 0);  // Aciona o relé (baixo)
-    if (!pieceDetected) {
-      startTime = millis() / 1000;  // Armazena o tempo de início da contagem em segundos, apenas na detecção inicial da peça
-    }
     pieceDetected = true;  // Indica que uma peça foi detectada
   } else {  // Caso não identifique nada
     digitalWrite(22, 1);  // Desliga o relé (alto)
     pieceDetected = false;  // Indica que nenhuma peça foi detectada
   }
 
+ //Lógica Relé e Led
+ if (pieceDetected) {
+   if(elapsedTime <= 2){
+     digitalWrite(4,1);
+     delay(3000);
+     digitalWrite(4,0);
+   }
+   else{
+     
+     digitalWrite(22,0);
+     delay(3000);
+     digitalWrite(22,1);
+   }
+ }
+
+ //Sistema de contagem do tempo
   unsigned long currentTime = millis() / 1000;  // Obtém o tempo atual em segundos
   elapsedTime = currentTime - startTime;  // Calcula o tempo decorrido
 
@@ -32,16 +46,7 @@ void loop() {
   Serial.print(elapsedTime);
   Serial.println(" segundos");
 
-  if (pieceDetected) {
-    digitalWrite(4, 1);  // Liga o LED para que o operador identifique
-    if (digitalRead(22) == 0) {  // Caso o relé acione
-      delay(3000);  // Espera 3 segundos
-    }
-    digitalWrite(4, 0);  // Apaga o LED
-  } else {
-    digitalWrite(4, 0);  // LED desligado
-  }
-
+ //Reinicia Tempos
   if (digitalRead(5) == 1) {  // Verifica se o botão foi pressionado
     startTime = currentTime;  // Reinicia o tempo de início da contagem
   }
