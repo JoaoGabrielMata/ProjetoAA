@@ -8,7 +8,6 @@ void setup() {
   pinMode(22, OUTPUT);  // RELÉ
   pinMode(23, INPUT);   // SENSOR
   pinMode(5, INPUT_PULLUP);  // BOTÃO
-  Serial.begin(9600);
 
   startTime = millis() / 1000;  // Inicializa o tempo de início da contagem em segundos
 }
@@ -24,16 +23,15 @@ void loop() {
   }
 
  //Lógica Relé e Led
- if (pieceDetected) {
-   if(elapsedTime <= 2){
-     digitalWrite(4,1);
-     delay(3000);
+ if (pieceDetected) { // Se uma peça foi identificada
+   if(elapsedTime <= 2){ // O código verifica se a peça foi detectada em 2 segundos 
+     digitalWrite(4,1); //Caso sim ele mostra utilizando o led 
+     delay(3000); // espera 3 segundos 
      digitalWrite(4,0);
    }
-   else{
-     
-     digitalWrite(22,0);
-     delay(3000);
+   else{ //Caso não 
+     digitalWrite(22,0); // Desliga o projeto utilizando o relé
+     delay(3000);  //Espera 3 segundos 
      digitalWrite(22,1);
    }
  }
@@ -41,10 +39,6 @@ void loop() {
  //Sistema de contagem do tempo
   unsigned long currentTime = millis() / 1000;  // Obtém o tempo atual em segundos
   elapsedTime = currentTime - startTime;  // Calcula o tempo decorrido
-
-  Serial.print("Tempo decorrido: ");
-  Serial.print(elapsedTime);
-  Serial.println(" segundos");
 
  //Reinicia Tempos
   if (digitalRead(5) == 1) {  // Verifica se o botão foi pressionado
