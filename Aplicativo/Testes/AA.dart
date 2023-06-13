@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Projeto AA',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: HomePage(),
     );
@@ -73,7 +73,7 @@ class CadastroPage extends StatelessWidget {
             SizedBox(height: 20),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Digite uma data',
+                labelText: 'data',
               ),
             ),
             SizedBox(height: 20),
