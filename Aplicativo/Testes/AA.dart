@@ -39,11 +39,11 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Conferir'),
+              child: Text('Acessar Teste e Conferir'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ConferirPage()),
+                  MaterialPageRoute(builder: (context) => TesteConferirPage()),
                 );
               },
             ),
@@ -80,7 +80,7 @@ class CadastroPage extends StatelessWidget {
             ElevatedButton(
               child: Text('Salvar'),
               onPressed: () {
-                //adicionar a lógica para salvar os dados
+                // adicionar a lógica para salvar os dados
               },
             ),
           ],
@@ -114,7 +114,68 @@ class ConferirPage extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            //  exibir as informações encontradas
+            // exibir as informações encontradas
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TestePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Teste'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text('Testar'),
+              onPressed: () {
+                // adicionar a função de teste
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TesteConferirPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Informação'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text('Teste'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestePage()),
+                );
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text('Conferir'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ConferirPage()),
+                );
+              },
+            ),
           ],
         ),
       ),

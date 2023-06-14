@@ -66,7 +66,7 @@ class AplicativoCadastro:
         self.limpar_campos()
 
     def exibir_teste(self):
-        self.resultados.config(text="Resultados em breve devem aparecer aqui")
+        self.resultados.config(text="Resultados apenas no projeto final")
 
     def limpar_campos(self):
         self.input_op.delete(0, tk.END)
