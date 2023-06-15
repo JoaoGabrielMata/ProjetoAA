@@ -1,49 +1,103 @@
-unsigned long startTime = 0;  // Variável para armazenar o tempo de início da contagem
-unsigned long elapsedTime = 0;  // Variável para armazenar o tempo decorrido
+#include <WiFi.h>
+#include <WebServer.h>
 
-bool pieceDetected = false;  // Variável para indicar se uma peça foi detectada
+const char* ssid = "Teste_ProjetoAA";
+const char* password = "Sense2023";
+
+unsigned long startTime = 0;
+unsigned long elapsedTime = 0;
+bool pieceDetected = false;
+bool relayState = false;
+
+WebServer server(80);
+
+void handleRootRequest() {
+  if (pieceDetected) {
+    if (elapsedTime <= 2) {
+      digitalWrite(4, HIGH);
+      delay(3000);
+      digitalWrite(4, LOW);
+    }
+    else {
+      digitalWrite(22, LOW);
+      delay(3000);
+      digitalWrite(22, HIGH);
+    }
+  }
+  server.send(200, "text/plain", "Hello from ESP32!");
+}
+
+void handleRelayControl() {
+  if (server.hasArg("state")) {
+    String state = server.arg("state");
+    if (state == "1") {
+      digitalWrite(22, LOW);
+      relayState = true;
+    }
+    else if (state == "0") {
+      digitalWrite(22, HIGH);
+      relayState = false;
+    }
+    server.send(200, "text/plain", "Relay state updated");
+  }
+  else {
+    server.send(400, "text/plain", "Invalid request");
+  }
+}
 
 void setup() {
-  pinMode(4, OUTPUT);   // LED
-  pinMode(22, OUTPUT);  // RELÉ
-  pinMode(23, INPUT);   // SENSOR
-  pinMode(5, INPUT_PULLUP);  // BOTÃO
+  Serial.begin(115200);  // Inicializa o monitor serial
+  pinMode(4, OUTPUT);
+  pinMode(22, OUTPUT);
+  pinMode(23, INPUT);
+  pinMode(5, INPUT_PULLUP);
 
-  startTime = millis() / 1000;  // Inicializa o tempo de início da contagem em segundos
+  startTime = millis() / 1000;
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi");
+
+  server.on("/", handleRootRequest);
+  server.on("/relay", handleRelayControl);
+
+  server.begin();
+  Serial.println("Server started");
 }
 
 void loop() {
+  server.handleClient();
 
- //Detecta peças
-  if (digitalRead(23) == 1) {  // Se o sensor identificar alguma coisa
-    pieceDetected = true;  // Indica que uma peça foi detectada
-  } else {  // Caso não identifique nada
-    digitalWrite(22, 1);  // Desliga o relé (alto)
-    pieceDetected = false;  // Indica que nenhuma peça foi detectada
+  if (digitalRead(23) == 1) {
+    pieceDetected = true;
+  }
+  else {
+    digitalWrite(22, HIGH);
+    pieceDetected = false;
   }
 
- //Lógica Relé e Led
- if (pieceDetected) { // Se uma peça foi identificada
-   if(elapsedTime <= 2){ // O código verifica se a peça foi detectada em 2 segundos 
-     digitalWrite(4,1); //Caso sim ele mostra utilizando o led 
-     delay(3000); // espera 3 segundos 
-     digitalWrite(4,0);
-   }
-   else{ //Caso não 
-     digitalWrite(22,0); // Desliga o projeto utilizando o relé
-     delay(3000);  //Espera 3 segundos 
-     digitalWrite(22,1);
-   }
- }
-
- //Sistema de contagem do tempo
-  unsigned long currentTime = millis() / 1000;  // Obtém o tempo atual em segundos
-  elapsedTime = currentTime - startTime;  // Calcula o tempo decorrido
-
- //Reinicia Tempos
-  if (digitalRead(5) == 1) {  // Verifica se o botão foi pressionado
-    startTime = currentTime;  // Reinicia o tempo de início da contagem
+  if (pieceDetected) {
+    if (elapsedTime <= 2) {
+      digitalWrite(4, HIGH);
+      delay(3000);
+      digitalWrite(4, LOW);
+    }
+    else {
+      digitalWrite(22, LOW);
+      delay(3000);
+      digitalWrite(22, HIGH);
+    }
   }
 
-  delay(100);  // Pequena pausa entre as iterações do loop
+  unsigned long currentTime = millis() / 1000;
+  elapsedTime = currentTime - startTime;
+
+  if (digitalRead(5) == 1) {
+    startTime = currentTime;
+  }
+
+  delay(100);
 }

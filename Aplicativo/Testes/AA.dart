@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -123,6 +124,19 @@ class ConferirPage extends StatelessWidget {
 }
 
 class TestePage extends StatelessWidget {
+  void controlRelay() async {
+    var url = Uri.parse('http://endereço_ip_esp32/relay'); // Substitua "endereço_ip_esp32" pelo endereço IP do seu ESP32
+
+    // Envie a solicitação POST para ligar o relé
+    var response = await http.post(url, body: {'state': '1'});
+
+    if (response.statusCode == 200) {
+      print('Relay ligado com sucesso');
+    } else {
+      print('Erro ao ligar o relay');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +150,7 @@ class TestePage extends StatelessWidget {
             ElevatedButton(
               child: Text('Testar'),
               onPressed: () {
-                // adicionar a função de teste
+                controlRelay(); // Chama a função para controlar o relé
               },
             ),
           ],
@@ -151,7 +165,7 @@ class TesteConferirPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Informação'),
+        title: Text('Acessar Teste e Conferir'),
       ),
       body: Center(
         child: Column(
