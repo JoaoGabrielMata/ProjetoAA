@@ -25,30 +25,45 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Página Inicial'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              child: Text('Cadastro'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CadastroPage()),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              child: Text('Acessar Teste e Conferir'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TesteConferirPage()),
-                );
-              },
-            ),
-          ],
+      body: Container(
+        color: Colors.green,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.lightGreen,
+                ),
+                child: Text(
+                  'Cadastro',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CadastroPage()),
+                  );
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.lightGreen,
+                ),
+                child: Text(
+                  'Acessar Teste e Conferir',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TesteConferirPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -67,19 +82,27 @@ class CadastroPage extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: 'Op',
               ),
             ),
             SizedBox(height: 20),
             TextField(
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: 'data',
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Salvar'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+              ),
+              child: Text(
+                'Salvar',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 // adicionar a lógica para salvar os dados
               },
@@ -103,13 +126,20 @@ class ConferirPage extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: 'Pesquisar informações',
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Pesquisar'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+              ),
+              child: Text(
+                'Pesquisar',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 // adicionar a lógica para buscar as informações
               },
@@ -148,7 +178,13 @@ class TestePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: Text('Testar'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+              ),
+              child: Text(
+                'Testar',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 controlRelay(); // Chama a função para controlar o relé
               },
@@ -172,7 +208,13 @@ class TesteConferirPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: Text('Teste'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+              ),
+              child: Text(
+                'Teste',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -182,7 +224,13 @@ class TesteConferirPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Conferir'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.lightGreen,
+              ),
+              child: Text(
+                'Conferir',
+                style: TextStyle(color: Colors.white),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
