@@ -68,20 +68,10 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               child: Text('Testar'),
               onPressed: () {
-                final url = 'http://192.168.197.45/pino22';
-
-                http.get(Uri.parse(url)).then((response) {
-                  if (response.statusCode == 200) {
-                    // O comando foi executado com sucesso
-                    print('Comando enviado com sucesso para o ESP32');
-                  } else {
-                    // Ocorreu um erro ao enviar o comando
-                    print('Erro ao enviar o comando para o ESP32');
-                  }
-                }).catchError((error) {
-                  // Ocorreu um erro na solicitação HTTP
-                  print('Erro na solicitação HTTP: $error');
-                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestePage()),
+                );
               },
             ),
           ],
@@ -200,6 +190,42 @@ class ConferirPage extends StatelessWidget {
             SizedBox(height: 20),
             // Exibir as informações encontradas
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class TestePage extends StatelessWidget {
+  void _enviarSolicitacaoRelay(bool estado) {
+    final url = 'http://192.168.197.5/atualizar_rele?estado=$estado';
+
+    http.get(Uri.parse(url)).then((response) {
+      if (response.statusCode == 200) {
+        // O comando foi executado com sucesso
+        print('Comando enviado com sucesso para o ESP32');
+      } else {
+        // Ocorreu um erro ao enviar o comando
+        print('Erro ao enviar o comando para o ESP32');
+      }
+    }).catchError((error) {
+      // Ocorreu um erro na solicitação HTTP
+      print('Erro na solicitação HTTP: $error');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: Text('Testar'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Teste'),
+          onPressed: () {
+            _enviarSolicitacaoRelay(true);
+          },
         ),
       ),
     );
