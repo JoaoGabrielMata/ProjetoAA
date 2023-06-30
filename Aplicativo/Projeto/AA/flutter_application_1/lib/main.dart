@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Classe para criar um AppBar personalizado
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
 
@@ -45,6 +46,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Botão para navegar para a página de cadastro
             ElevatedButton(
               child: Text('Cadastro'),
               onPressed: () {
@@ -55,6 +57,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
+            // Botão para navegar para a página de conferência
             ElevatedButton(
               child: Text('Conferir'),
               onPressed: () {
@@ -65,7 +68,8 @@ class HomePage extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            // Botão para navegar para a página de teste
+            ElevatedButtaon(
               child: Text('Testar'),
               onPressed: () {
                 Navigator.push(
@@ -197,23 +201,6 @@ class ConferirPage extends StatelessWidget {
 }
 
 class TestePage extends StatelessWidget {
-  void _enviarSolicitacaoRelay(bool estado) {
-    final url = 'http://192.168.197.5/atualizar_rele?estado=$estado';
-
-    http.get(Uri.parse(url)).then((response) {
-      if (response.statusCode == 200) {
-        // O comando foi executado com sucesso
-        print('Comando enviado com sucesso para o ESP32');
-      } else {
-        // Ocorreu um erro ao enviar o comando
-        print('Erro ao enviar o comando para o ESP32');
-      }
-    }).catchError((error) {
-      // Ocorreu um erro na solicitação HTTP
-      print('Erro na solicitação HTTP: $error');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,7 +211,65 @@ class TestePage extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Teste'),
           onPressed: () {
-            _enviarSolicitacaoRelay(true);
+            final url = 'http://192.168.197.5/relay?state=1'; 
+
+            http.get(Uri.parse(url)).then((response) {
+              if (response.statusCode == 200) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Comando Enviado'),
+                      content: Text('Comando enviado com sucesso para o ESP32.'),
+                      actions: [
+                        ElevatedButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Erro ao Enviar Comando'),
+                      content: Text('Ocorreu um erro ao enviar o comando para o ESP32.'),
+                      actions: [
+                        ElevatedButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
+            }).catchError((error) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Erro na Solicitação HTTP'),
+                    content: Text('Ocorreu um erro na solicitação HTTP: $error'),
+                    actions: [
+                      ElevatedButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            });
           },
         ),
       ),
