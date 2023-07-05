@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 void main() {
   runApp(MyApp());
@@ -69,7 +70,7 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             // Botão para navegar para a página de teste
-            ElevatedButtaon(
+            ElevatedButton(
               child: Text('Testar'),
               onPressed: () {
                 Navigator.push(
@@ -86,20 +87,20 @@ class HomePage extends StatelessWidget {
 }
 
 class CadastroPage extends StatelessWidget {
-  final TextEditingController opController = TextEditingController();
-  final TextEditingController dataController = TextEditingController();
-  final TextEditingController quantidadeController = TextEditingController();
+  void _lerQRCode(BuildContext context) async {
+    String qrCode = await FlutterBarcodeScanner.scanBarcode(
+      '#00FF00', // Cor personalizada para a animação do scanner
+      'Cancelar', // Texto do botão de cancelamento
+      true, // Mostrar flash para leitura do código QR
+      ScanMode.QR, // Modo de leitura do código QR
+    );
 
-  void _salvarDados(BuildContext context) {
-    // Lógica para salvar os dados
-
-    // Exibindo a mensagem de salvo
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Dados Salvos'),
-          content: Text('Os dados foram salvos com sucesso.'),
+          title: Text('Informações do QR Code'),
+          content: Text('QR Code lido: $qrCode'),
           actions: [
             ElevatedButton(
               child: Text('OK'),
@@ -123,31 +124,10 @@ class CadastroPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            TextField(
-              controller: opController,
-              decoration: InputDecoration(
-                labelText: 'Op',
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: dataController,
-              decoration: InputDecoration(
-                labelText: 'Data',
-              ),
-            ),
-            SizedBox(height: 20),
-            TextField(
-              controller: quantidadeController,
-              decoration: InputDecoration(
-                labelText: 'Quantidade',
-              ),
-            ),
-            SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Salvar'),
+              child: Text('Ler QR Code'),
               onPressed: () {
-                _salvarDados(context);
+                _lerQRCode(context);
               },
             ),
           ],
@@ -211,7 +191,7 @@ class TestePage extends StatelessWidget {
         child: ElevatedButton(
           child: Text('Teste'),
           onPressed: () {
-            final url = 'http://192.168.197.5/relay?state=1'; 
+            final url = 'http://192.168.197.5/relay?state=1';
 
             http.get(Uri.parse(url)).then((response) {
               if (response.statusCode == 200) {
