@@ -1,12 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,16 +18,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
-// Classe para criar um AppBar personalizado
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
 
-  CustomAppBar({required this.title});
+  const CustomAppBar({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,34 +36,34 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: Text('Página Inicial'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Botão para navegar para a página de cadastro
             ElevatedButton(
-              child: Text('Cadastro'),
+              child: const Text('Cadastro'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CadastroPage()),
+                  MaterialPageRoute(builder: (context) => const CadastroPage()),
                 );
               },
             ),
-            SizedBox(height: 20),
-            // Botão para navegar para a página de conferência
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Conferir'),
+              child: const Text('Conferir'),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -68,14 +71,13 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 20),
-            // Botão para navegar para a página de teste
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Testar'),
+              child: const Text('Testar'),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TestePage()),
+                  MaterialPageRoute(builder: (context) => const TestePage()),
                 );
               },
             ),
@@ -87,23 +89,33 @@ class HomePage extends StatelessWidget {
 }
 
 class CadastroPage extends StatelessWidget {
-  void _lerQRCode(BuildContext context) async {
-    String qrCode = await FlutterBarcodeScanner.scanBarcode(
-      '#00FF00', // Cor personalizada para a animação do scanner
-      'Cancelar', // Texto do botão de cancelamento
-      false, // Mostrar flash para leitura do código QR
-      ScanMode.QR, // Modo de leitura do código QR
+  const CadastroPage({Key? key}) : super(key: key);
+
+  bool? get mounted => null;
+
+  Future<void> _scanQRCode(BuildContext context) async {
+    final barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
+      '#ff6666',
+      'Cancelar',
+      false,
+      ScanMode.QR,
     );
 
+    if (!mounted!) return;
+
+    _showQRCodeDialog(context, barcodeScanResult);
+  }
+
+  void _showQRCodeDialog(BuildContext context, String qrCodeValue) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Informações do QR Code'),
-          content: Text('QR Code lido: $qrCode'),
+          title: const Text('QR Code Lido'),
+          content: Text('O QR Code lido foi: $qrCodeValue'),
           actions: [
             ElevatedButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -117,18 +129,16 @@ class CadastroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: Text('Cadastro'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: Text('Ler QR Code'),
-              onPressed: () {
-                _lerQRCode(context);
-              },
+              onPressed: () => _scanQRCode(context),
+              child: const Text('Ler QR Code'),
             ),
           ],
         ),
@@ -141,38 +151,39 @@ class ConferirPage extends StatelessWidget {
   final TextEditingController opController = TextEditingController();
   final TextEditingController dataController = TextEditingController();
 
+  ConferirPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: Text('Conferir'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             TextField(
               controller: opController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Op',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: dataController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Data',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text('Pesquisar'),
+              child: const Text('Pesquisar'),
               onPressed: () {
                 // Adicionar a lógica para buscar as informações
               },
             ),
-            SizedBox(height: 20),
-            // Exibir as informações encontradas
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -181,17 +192,19 @@ class ConferirPage extends StatelessWidget {
 }
 
 class TestePage extends StatelessWidget {
+  const TestePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: Text('Testar'),
       ),
       body: Center(
         child: ElevatedButton(
-          child: Text('Teste'),
+          child: const Text('Teste'),
           onPressed: () {
-            final url = 'http://192.168.197.5/relay?state=1';
+            const url = 'http://192.168.75.5:80';
 
             http.get(Uri.parse(url)).then((response) {
               if (response.statusCode == 200) {
@@ -199,11 +212,11 @@ class TestePage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Comando Enviado'),
-                      content: Text('Comando enviado com sucesso para o ESP32.'),
+                      title: const Text('Comando Enviado'),
+                      content: const Text('Comando enviado com sucesso para o ESP32.'),
                       actions: [
                         ElevatedButton(
-                          child: Text('OK'),
+                          child: const Text('OK'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -217,11 +230,11 @@ class TestePage extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Erro ao Enviar Comando'),
-                      content: Text('Ocorreu um erro ao enviar o comando para o ESP32.'),
+                      title: const Text('Erro ao Enviar Comando'),
+                      content: const Text('Ocorreu um erro ao enviar o comando para o ESP32.'),
                       actions: [
                         ElevatedButton(
-                          child: Text('OK'),
+                          child: const Text('OK'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -236,11 +249,11 @@ class TestePage extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Erro na Solicitação HTTP'),
+                    title: const Text('Erro na Solicitação HTTP'),
                     content: Text('Ocorreu um erro na solicitação HTTP: $error'),
                     actions: [
                       ElevatedButton(
-                        child: Text('OK'),
+                        child: const Text('OK'),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
