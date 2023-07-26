@@ -91,7 +91,7 @@ class CadastroPage extends StatelessWidget {
     String qrCode = await FlutterBarcodeScanner.scanBarcode(
       '#00FF00', // Cor personalizada para a animação do scanner
       'Cancelar', // Texto do botão de cancelamento
-      true, // Mostrar flash para leitura do código QR
+      false, // Mostrar flash para leitura do código QR
       ScanMode.QR, // Modo de leitura do código QR
     );
 
