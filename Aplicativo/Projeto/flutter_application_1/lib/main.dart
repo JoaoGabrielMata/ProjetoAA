@@ -91,8 +91,6 @@ class HomePage extends StatelessWidget {
 class CadastroPage extends StatelessWidget {
   const CadastroPage({Key? key}) : super(key: key);
 
-  bool? get mounted => null;
-
   Future<void> _scanQRCode(BuildContext context) async {
     final barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
       '#ff6666',
@@ -100,8 +98,6 @@ class CadastroPage extends StatelessWidget {
       false,
       ScanMode.QR,
     );
-
-    if (!mounted!) return;
 
     _showQRCodeDialog(context, barcodeScanResult);
   }
@@ -204,7 +200,7 @@ class TestePage extends StatelessWidget {
         child: ElevatedButton(
           child: const Text('Teste'),
           onPressed: () {
-            const url = 'http://192.168.75.5:80';
+            const url = 'http://192.168.75.5/24';
 
             http.get(Uri.parse(url)).then((response) {
               if (response.statusCode == 200) {
