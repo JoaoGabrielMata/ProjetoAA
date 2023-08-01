@@ -8,7 +8,7 @@ const char* password = "Sense2023"; //Senha da Rede
 
 //Variáveis 
 bool relayState = false; //Inicia o projeto com o estado do relé falso
-float segundos; //Sistema de contragem do tempo
+float segundos; //Sistema de contagem do tempo
 
 WebServer server(80);//Inicia o Servidor do ESP
 
@@ -18,7 +18,7 @@ void handleRootRequest() {
 
 //Acionamento do relé
 void handleAtualizarRele() {
-  if (server.hasArg("estado")) { //Verifica se a requisição deiu certo 
+  if (server.hasArg("estado")) { //Verifica se a requisição deu certo 
     String estado = server.arg("estado");
     if (estado == "false") {
       digitalWrite(23, 1);
@@ -43,16 +43,18 @@ void setup() {
   pinMode(22, OUTPUT); //Relé 
   pinMode(4,INPUT); //Botão
   pinMode(23, OUTPUT); //Led
+  pinMode(1, INPUT); //Pino qualquer (Simboliza sensor)
 
   WiFi.begin(ssid, password);//Conecta o Esp na rede de internet
 
   //Indicação se o Esp conseguiu se conectar a rede
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(23, 1); // LED ligado indica que o ESP se conectou ao Wi-Fi com sucesso
+    Serial.println("Connected to WiFi");
+  } else {
+    digitalWrite(23, 0); // LED desligado indica que o ESP não conseguiu se conectar ao Wi-Fi
+    Serial.println("Failed to connect to WiFi");
   }
-  Serial.println("Connected to WiFi"); 
-
   //Mostra as mensagens para caso de erro
   server.on("/", handleRootRequest);
   server.on("/24", handleAtualizarRele);
@@ -63,17 +65,9 @@ void setup() {
 void loop() {
   server.handleClient();//Puxa a solicitação HTTP
 
- //Sistema para reiniciar o tempo
-  if(segundos > 5){
-    digitalWrite(22,1); //Caso passe de 5 segundos, o led liga para mostrar ao operador que o sistema não vai fazer a verificação correta
-    delay(5000);  
-    digitalWrite(22,0);
-  }
-
  //Sistema para reinicar o tempo e fazer a verificação da maneira devida
   if(digitalRead(4) == 1){
     segundos = 0;
-    digitalWrite(22,0);
   }
 
 }
