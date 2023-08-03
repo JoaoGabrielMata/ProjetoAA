@@ -21,11 +21,11 @@ void handleAtualizarRele() {
   if (server.hasArg("estado")) { //Verifica se a requisição deu certo 
     String estado = server.arg("estado");
     if (estado == "false") {
-      digitalWrite(23, 1);
+      digitalWrite(22, 1);
       relayState = true;  //caso tenha ocorrido algum erro, ele deixa o relé desligado
     }
     else if (estado == "true") {
-      digitalWrite(23, 0); //Caso tenha dado certo, ele aciona o relé 
+      digitalWrite(22, 0); //Caso tenha dado certo, ele aciona o relé 
       relayState = false; 
     }
     server.send(200, "text/plain", "Atualização no estado do relé");
