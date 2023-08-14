@@ -200,8 +200,7 @@ class TestePage extends StatelessWidget {
         child: ElevatedButton(
           child: const Text('Teste'),
           onPressed: () {
-            const url = 'http://192.168.75.5/24';
-
+            const url = 'http://192.168.107.5?estado=true';
             http.get(Uri.parse(url)).then((response) {
               if (response.statusCode == 200) {
                 showDialog(
