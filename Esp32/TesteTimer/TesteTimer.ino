@@ -1,73 +1,74 @@
-//Bibliotecas
+// Bibliotecas
 #include <WiFi.h>
 #include <WebServer.h>
 
-//Cadastro do Wi-fi
-const char* ssid = "Teste_ProjetoAA"; //Nome da Rede
-const char* password = "Sense2023"; //Senha da Rede
+// Cadastro do Wi-Fi
+const char* ssid = "Teste_ProjetoAA"; // Nome da Rede
+const char* password = "Sense2023";  // Senha da Rede
 
-//Variáveis 
-bool relayState = false; //Inicia o projeto com o estado do relé falso
-float segundos; //Sistema de contagem do tempo
+// Variáveis
+bool relayState = false; // Estado atual do relé (false = desligado, true = ligado)
+bool estado = false;
+float segundos;  // Sistema de contagem do tempo
 
-WebServer server(80);//Inicia o Servidor do ESP
+WebServer server(80); // Inicia o Servidor do ESP
 
-void handleRootRequest() {
-  server.send(200, "text/plain", "Navegue até a página '/24'"); //Mensagem padrão fornecida pelo Esp (para caso de erro)
+// Função para conectar ao Wi-Fi
+void connectToWiFi() {
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(100);
+  }
+  digitalWrite(23, 1); // LED ligado indica que o ESP se conectou ao Wi-Fi com sucesso
+  Serial.println("Connected to WiFi");
 }
 
-//Acionamento do relé
+// Tratamento da página inicial
+void handleRootRequest() {
+  server.send(200, "text/plain", ""); // Mensagem padrão fornecida pelo ESP (caso de erro)
+}
+
+// Acionamento do relé
 void handleAtualizarRele() {
-  if (server.hasArg("estado")) { //Verifica se a requisição deu certo 
+  if (server.hasArg("estado")) { // Verifica se a requisição tem o parâmetro "estado"
     String estado = server.arg("estado");
     if (estado == "false") {
-      digitalWrite(22, 1);
-      relayState = true;  //caso tenha ocorrido algum erro, ele deixa o relé desligado
+      digitalWrite(22, 1);  // Desliga o relé (pino HIGH)
+      relayState = true;     // Marca o relé como desligado
+    } else if (estado == "true") {
+      digitalWrite(22, 0);  // Liga o relé (pino LOW)
+      relayState = false;    // Marca o relé como ligado
     }
-    else if (estado == "true") {
-      digitalWrite(22, 0); //Caso tenha dado certo, ele aciona o relé 
-      relayState = false; 
-    }
+
     server.send(200, "text/plain", "Atualização no estado do relé");
-  }
-  else {
+  } else {
     server.send(400, "text/plain", "Requisição inválida");
   }
 }
 
 void setup() {
-  segundos = millis()/1000;  //Conversão de millisegundos para segundos
-  Serial.begin(115200); //inicia o monitor serial (para caso de erro)
+  Serial.begin(115200); // Inicia o monitor serial (para caso de erro)
 
-//Declara os pinos 
-  pinMode(22, OUTPUT); //Relé 
-  pinMode(4,INPUT); //Botão
-  pinMode(23, OUTPUT); //Led
-  pinMode(1, INPUT); //Pino qualquer (Simboliza sensor)
+  pinMode(22, OUTPUT);
+  pinMode(4, INPUT);
+  pinMode(23, OUTPUT);
 
-  WiFi.begin(ssid, password);//Conecta o Esp na rede de internet
+  connectToWiFi(); // Conecta o ESP à rede de internet
 
-  //Indicação se o Esp conseguiu se conectar a rede
-  if (WiFi.status() == WL_CONNECTED) {
-    digitalWrite(23, 1); // LED ligado indica que o ESP se conectou ao Wi-Fi com sucesso
-    Serial.println("Connected to WiFi");
-  } else {
-    digitalWrite(23, 0); // LED desligado indica que o ESP não conseguiu se conectar ao Wi-Fi
-    Serial.println("Failed to connect to WiFi");
-  }
-  //Mostra as mensagens para caso de erro
+  // Mostra as mensagens para caso de erro
   server.on("/", handleRootRequest);
-  server.on("/24", handleAtualizarRele);
+  server.on("/", handleAtualizarRele);
   server.begin();
+
+  segundos = millis() / 1000; // Conversão de millisegundos para segundos
   Serial.println("Server started");
 }
 
 void loop() {
-  server.handleClient();//Puxa a solicitação HTTP
+  server.handleClient(); // Puxa a solicitação HTTP
 
- //Sistema para reinicar o tempo e fazer a verificação da maneira devida
-  if(digitalRead(4) == 1){
+  // Sistema para reiniciar o tempo e fazer a verificação da maneira adequada
+  if (digitalRead(4) == 1) {
     segundos = 0;
   }
-
 }
