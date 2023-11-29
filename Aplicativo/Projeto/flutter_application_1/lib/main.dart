@@ -199,23 +199,23 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     await testePage.sendCommand(context, false);
 
     // Mostrar diálogo ao concluir o teste da peça
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Teste Concluído'),
-          content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
-          actions: [
-            ElevatedButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return AlertDialog(
+    //       title: const Text('Teste Concluído'),
+    //       content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
+    //       actions: [
+    //         ElevatedButton(
+    //           child: const Text('OK'),
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
 
     // Aguardar um tempo antes de continuar com a próxima peça
     await Future.delayed(Duration(seconds: 1));

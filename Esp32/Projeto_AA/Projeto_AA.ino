@@ -26,9 +26,15 @@ void handleAtualizarRele() {
     Serial.print("Estado recebido");
     if (estado == "false") {
       digitalWrite(23, LOW);
+      digitalWrite(5,1);
+      delay(1000);
+      digitalWrite(5,0);
       Serial.println("Desligado");
     } else {
       digitalWrite(23, HIGH);
+      digitalWrite(5,1);
+      delay(1000);
+      digitalWrite(5,0);
       Serial.println("Ligado");
     }
   }
