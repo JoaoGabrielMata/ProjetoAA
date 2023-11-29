@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, prefer_is_empty, unused_element, unused_local_variable, duplicate_ignore, prefer_const_constructors
 
+//bibliotecas 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -42,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  @override
+  @override //Configuração da página inicial. (Botões, posição, etc...)
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
@@ -88,10 +89,10 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class CadastroPage extends StatelessWidget {
+class CadastroPage extends StatelessWidget { //página de cadastro das peças
   const CadastroPage({Key? key}) : super(key: key);
 
-  Future<void> _scanQRCode(BuildContext context) async {
+  Future<void> _scanQRCode(BuildContext context) async { //Inicia a leitura do QrCode
     final barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
       '#ff6666',
       'Cancelar',
@@ -99,7 +100,7 @@ class CadastroPage extends StatelessWidget {
       ScanMode.QR,
     );
 
-    if (barcodeScanResult != '-1') {
+    if (barcodeScanResult != '-1') { //Identifica o valor do QrCode e separa ele em informações para o sistema trabalhar 
       List<String> parts = barcodeScanResult.split('/');
       if (parts.length >= 5) {
         String pathNumber = parts[0];
@@ -107,7 +108,7 @@ class CadastroPage extends StatelessWidget {
         String quantidade = parts[2];
         String data = '${parts[3]}/${parts[4]}';
 
-        showDialog(
+        showDialog( //Mostra as informações para o usuario
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -135,7 +136,7 @@ class CadastroPage extends StatelessWidget {
         );
       } else {
         // Código QR não possui informações suficientes
-        showDialog(
+        showDialog( //Caso de erros repentinos na leitura do QrCode
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -156,10 +157,10 @@ class CadastroPage extends StatelessWidget {
     }
   }
 
-Future<void> _realizarTeste(BuildContext context, String op, String quantidade, String data) async {
+Future<void> _realizarTeste(BuildContext context, String op, String quantidade, String data) async { //Função para realizar a rotina de testes para as OPs
   int quantidadePecas = int.tryParse(quantidade) ?? 0;
 
-  for (int i = 0; i < quantidadePecas; i++) {
+  for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
     // Mostrar o diálogo antes de iniciar cada teste
     bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
 
@@ -222,7 +223,7 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
   }
 
   // Após concluir todos os testes, mostrar o diálogo de conclusão
-  showDialog(
+  showDialog( //dialogo para informar o usuario de que os tesets foram concluidos 
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -241,7 +242,7 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
   );
 }
 
-Future<bool> _showTestDialog(BuildContext context, int currentPiece, int totalPieces) async {
+Future<bool> _showTestDialog(BuildContext context, int currentPiece, int totalPieces) async { //dialogo entre teste de cada peça para confirmação do operador 
   bool proceedWithTest = false;
 
   await showDialog(
@@ -279,7 +280,7 @@ Future<bool> _showTestDialog(BuildContext context, int currentPiece, int totalPi
   return proceedWithTest;
 }
 
-  Future<void> _showPieceTestedDialog(BuildContext context, int currentPiece, int totalPieces, String sensorData) async {
+  Future<void> _showPieceTestedDialog(BuildContext context, int currentPiece, int totalPieces, String sensorData) async { //dialogo mostrando para o operador que todas as peças da OP foram testadas 
     return showDialog(
       context: context,
       builder: (context) {
@@ -326,7 +327,7 @@ Future<bool> _showTestDialog(BuildContext context, int currentPiece, int totalPi
   }
 }
 
-class ConferirPage extends StatelessWidget {
+class ConferirPage extends StatelessWidget { //Página para busca de informações. (lógica ainda não implementada)
   final TextEditingController opController = TextEditingController();
   final TextEditingController dataController = TextEditingController();
 
@@ -370,14 +371,14 @@ class ConferirPage extends StatelessWidget {
   }
 }
 
-class TestePage extends StatelessWidget {
+class TestePage extends StatelessWidget { //Página para teste geral da Giga 
   TestePage({Key? key}) : super(key: key);
 
-  String sensorData = "Dados do Sensor: N/A";
+  String sensorData = "Dados do Sensor: N/A"; //definindo o padrão da mensagem em relação ao valor do sensor 
 
   Future<void> sendCommand(BuildContext context, bool estado) async {
-  final url = 'http://192.168.105.81/rele?estado=$estado'; // Corrigido o erro de digitação
-  try {
+  final url = 'http://192.168.105.81/rele?estado=$estado'; // Rota de onde a requisição HTTP deve ser enviada no servidor do ESP
+  try { //Caso ocorra algum erro inesperado 
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       _showAlertDialog(context, 'Comando Enviado', 'Comando enviado com sucesso para o ESP32.');
@@ -390,7 +391,7 @@ class TestePage extends StatelessWidget {
 }
 
   Future<void> fetchSensorData(BuildContext context) async {
-  const url = 'http://192.168.105.81/sensor';
+  const url = 'http://192.168.105.81/sensor'; //Rota de comunicação com o servidor 
   try {
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
@@ -406,6 +407,7 @@ class TestePage extends StatelessWidget {
   }
 }
 
+//daqui pra baixo apenas configurações de botão e coisas do gênero para a página de testes
 void _showSensorDataDialog(BuildContext context, String sensorData) {
   showDialog(
     context: context,
