@@ -44,6 +44,7 @@ void handleSensorData() {
 void setup() {
   Serial.begin(115200);
   pinMode(4, INPUT); // Configurar o pino do sensor como entrada
+  pinMode(5,OUTPUT);
   pinMode(23, OUTPUT);
 
   connectToWiFi();
@@ -58,4 +59,8 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
+  if(digitalRead(4) == 1){
+    digitalWrite(5,1);
+  }
 }
