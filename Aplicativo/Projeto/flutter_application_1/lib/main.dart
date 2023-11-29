@@ -163,10 +163,10 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     // Mostrar o diálogo antes de iniciar cada teste
     bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
 
-    if (!proceedWithTest) {
-      // Se o usuário escolher interromper o teste, sair do loop
-      break;
-    }
+    // if (!proceedWithTest) {
+    //   // Se o usuário escolher interromper o teste, sair do loop
+    //   break;
+    // }
 
     TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
 
