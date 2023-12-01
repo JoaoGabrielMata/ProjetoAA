@@ -163,13 +163,12 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
   for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
     // Mostrar o diálogo antes de iniciar cada teste
     bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
-
-    // if (!proceedWithTest) {
-    //   // Se o usuário escolher interromper o teste, sair do loop
-    //   break;
-    // }
-
     TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
+    
+    if (!proceedWithTest) {
+      // Se o usuário escolher interromper o teste, sair do loop
+      break;
+    }
 
     // Aguardar um tempo antes de iniciar o teste da peça
     await Future.delayed(Duration(seconds: 1));
@@ -199,24 +198,24 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     // Desacionar o relé novamente
     await testePage.sendCommand(context, false);
 
-    // Mostrar diálogo ao concluir o teste da peça
-    // showDialog(
-    //   context: context,
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       title: const Text('Teste Concluído'),
-    //       content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
-    //       actions: [
-    //         ElevatedButton(
-    //           child: const Text('OK'),
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
+    Mostrar diálogo ao concluir o teste da peça
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Teste Concluído'),
+          content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
+          actions: [
+            ElevatedButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
 
     // Aguardar um tempo antes de continuar com a próxima peça
     await Future.delayed(Duration(seconds: 1));
@@ -378,34 +377,15 @@ class TestePage extends StatelessWidget { //Página para teste geral da Giga
 
   Future<void> sendCommand(BuildContext context, bool estado) async {
   final url = 'http://192.168.105.81/rele?estado=$estado'; // Rota de onde a requisição HTTP deve ser enviada no servidor do ESP
-  try { //Caso ocorra algum erro inesperado 
     final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      _showAlertDialog(context, 'Comando Enviado', 'Comando enviado com sucesso para o ESP32.');
-    } else {
-      _showAlertDialog(context, 'Erro ao Enviar Comando', 'Erro ${response.statusCode}: ${response.body}');
-    }
-  } catch (error) {
-    _showAlertDialog(context, 'Erro na Solicitação HTTP', 'Ocorreu um erro na solicitação HTTP: $error');
   }
-}
 
   Future<void> fetchSensorData(BuildContext context) async {
-  const url = 'http://192.168.105.81/sensor'; //Rota de comunicação com o servidor 
-  try {
+    const url = 'http://192.168.105.81/sensor'; //Rota de comunicação com o servidor 
     final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      final sensorData = "Dados do Sensor: ${response.body}";
-      _showSensorDataDialog(context, sensorData);
-    } else {
-      _showAlertDialog(context, 'Erro ao Solicitar Dados do Sensor',
-          'Ocorreu um erro ao solicitar os dados do sensor.');
-    }
-  } catch (error) {
-    _showAlertDialog(context, 'Erro na Solicitação HTTP',
-        'Ocorreu um erro na solicitação HTTP: $error');
+    final sensorData = "Dados do Sensor: ${response.body}";
+    _showSensorDataDialog(context, sensorData);
   }
-}
 
 //daqui pra baixo apenas configurações de botão e coisas do gênero para a página de testes
 void _showSensorDataDialog(BuildContext context, String sensorData) {
