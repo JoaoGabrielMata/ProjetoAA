@@ -162,41 +162,41 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
 
   for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
     // Mostrar o diálogo antes de iniciar cada teste
-    bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
+    bool proceedWithTest = _showTestDialog(context, i + 1, quantidadePecas);
     TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
-    
+
     if (!proceedWithTest) {
       // Se o usuário escolher interromper o teste, sair do loop
       break;
     }
 
     // Aguardar um tempo antes de iniciar o teste da peça
-    await Future.delayed(Duration(seconds: 1));
+    Future.delayed(Duration(seconds: 1));
 
     // Acionar o relé
-    await testePage.sendCommand(context, true);
+    testePage.sendCommand(context, true);
 
     // Aguardar um tempo antes de verificar o sensor após o acionamento do relé
-    await Future.delayed(Duration(seconds: 1));
+    Future.delayed(Duration(seconds: 1));
 
     // Verificar o sensor após o acionamento do relé
     // ignore: unused_local_variable
-    final sensorData = await testePage.fetchSensorData(context);
+    final sensorData = testePage.fetchSensorData(context);
 
     // Desacionar o relé
-    await testePage.sendCommand(context, false);
+    testePage.sendCommand(context, false);
 
     // Aguardar um tempo antes de continuar com a próxima peça
-    await Future.delayed(Duration(seconds: 1));
+    Future.delayed(Duration(seconds: 1));
 
     // Acionar o relé novamente
-    await testePage.sendCommand(context, true);
+    testePage.sendCommand(context, true);
 
     // Aguardar um tempo antes de verificar o sensor após o segundo acionamento do relé
-    await Future.delayed(Duration(seconds: 1));
+    Future.delayed(Duration(seconds: 1));
 
     // Desacionar o relé novamente
-    await testePage.sendCommand(context, false);
+    testePage.sendCommand(context, false);
 
     Mostrar diálogo ao concluir o teste da peça
     showDialog(
@@ -218,7 +218,7 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     );
 
     // Aguardar um tempo antes de continuar com a próxima peça
-    await Future.delayed(Duration(seconds: 1));
+    Future.delayed(Duration(seconds: 1));
   }
 
   // Após concluir todos os testes, mostrar o diálogo de conclusão
