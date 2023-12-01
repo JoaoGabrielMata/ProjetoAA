@@ -159,11 +159,11 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
 
 Future<void> _realizarTeste(BuildContext context, String op, String quantidade, String data) async { //Função para realizar a rotina de testes para as OPs
   int quantidadePecas = int.tryParse(quantidade) ?? 0;
+  TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
 
   for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
     // Mostrar o diálogo antes de iniciar cada teste
     bool proceedWithTest = _showTestDialog(context, i + 1, quantidadePecas);
-    TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
 
     if (!proceedWithTest) {
       // Se o usuário escolher interromper o teste, sair do loop
