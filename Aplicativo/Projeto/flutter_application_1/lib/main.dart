@@ -159,44 +159,44 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
 
 Future<void> _realizarTeste(BuildContext context, String op, String quantidade, String data) async { //Função para realizar a rotina de testes para as OPs
   int quantidadePecas = int.tryParse(quantidade) ?? 0;
-  TestePage testePage = TestePage(); // Crie uma nova instância a cada iteração
+  TestePage testePage = TestePage(); 
 
   for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
     // Mostrar o diálogo antes de iniciar cada teste
-    bool proceedWithTest = _showTestDialog(context, i + 1, quantidadePecas);
-
+    bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
+    
     if (!proceedWithTest) {
       // Se o usuário escolher interromper o teste, sair do loop
       break;
     }
 
     // Aguardar um tempo antes de iniciar o teste da peça
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
 
     // Acionar o relé
-    testePage.sendCommand(context, true);
+    await testePage.sendCommand(context, true);
 
     // Aguardar um tempo antes de verificar o sensor após o acionamento do relé
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
 
     // Verificar o sensor após o acionamento do relé
     // ignore: unused_local_variable
-    final sensorData = testePage.fetchSensorData(context);
+    final sensorData = await testePage.fetchSensorData(context);
 
     // Desacionar o relé
-    testePage.sendCommand(context, false);
+    await testePage.sendCommand(context, false);
 
     // Aguardar um tempo antes de continuar com a próxima peça
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
 
     // Acionar o relé novamente
-    testePage.sendCommand(context, true);
+    await testePage.sendCommand(context, true);
 
     // Aguardar um tempo antes de verificar o sensor após o segundo acionamento do relé
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
 
     // Desacionar o relé novamente
-    testePage.sendCommand(context, false);
+    await testePage.sendCommand(context, false);
 
     Mostrar diálogo ao concluir o teste da peça
     showDialog(
@@ -218,7 +218,7 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     );
 
     // Aguardar um tempo antes de continuar com a próxima peça
-    Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 1));
   }
 
   // Após concluir todos os testes, mostrar o diálogo de conclusão
