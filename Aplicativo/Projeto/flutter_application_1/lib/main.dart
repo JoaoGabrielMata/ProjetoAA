@@ -198,7 +198,7 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
     // Desacionar o relé novamente
     await testePage.sendCommand(context, false);
 
-    Mostrar diálogo ao concluir o teste da peça
+   // Mostrar diálogo ao concluir o teste da peça
     showDialog(
       context: context,
       builder: (context) {
