@@ -28,17 +28,9 @@ void handleAtualizarRele() { //Lógica por trás do acionamento do relé
     if (estado == "false") {
       digitalWrite(23, 0); //Linha onde mostra que o relé foi desligado
       Serial.println(" Desligado");
-      //testes
-      digitalWrite(5,1);
-      delay(1000);
-      digitalWrite(5,0);
     } else {
       digitalWrite(23, 1); //Linha onde mostra que o relé foi acionado
       Serial.println(" Ligado");
-      //testes
-      digitalWrite(5,1);
-      delay(1000);
-      digitalWrite(5,0);
     }
   }
 }

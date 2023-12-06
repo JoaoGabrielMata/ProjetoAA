@@ -89,10 +89,10 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class CadastroPage extends StatelessWidget { //página de cadastro das peças
+class CadastroPage extends StatelessWidget {
   const CadastroPage({Key? key}) : super(key: key);
 
-  Future<void> _scanQRCode(BuildContext context) async { //Inicia a leitura do QrCode
+  Future<void> _scanQRCode(BuildContext context) async {
     final barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
       '#ff6666',
       'Cancelar',
@@ -100,7 +100,7 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
       ScanMode.QR,
     );
 
-    if (barcodeScanResult != '-1') { //Identifica o valor do QrCode e separa ele em informações para o sistema trabalhar 
+    if (barcodeScanResult != '-1') {
       List<String> parts = barcodeScanResult.split('/');
       if (parts.length >= 5) {
         String pathNumber = parts[0];
@@ -108,7 +108,7 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
         String quantidade = parts[2];
         String data = '${parts[3]}/${parts[4]}';
 
-        showDialog( //Mostra as informações para o usuario
+        showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -125,9 +125,13 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
               actions: [
                 ElevatedButton(
                   child: const Text('OK'),
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
-                    _realizarTeste(context, op, quantidade, data);
+                    bool proceedWithTest =
+                        await _showTestDialog(context, 1, int.parse(quantidade));
+                    if (proceedWithTest) {
+                      await _realizarTeste(context, op, quantidade, data);
+                    }
                   },
                 ),
               ],
@@ -135,8 +139,7 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
           },
         );
       } else {
-        // Código QR não possui informações suficientes
-        showDialog( //Caso de erros repentinos na leitura do QrCode
+        showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
@@ -157,54 +160,55 @@ class CadastroPage extends StatelessWidget { //página de cadastro das peças
     }
   }
 
-Future<void> _realizarTeste(BuildContext context, String op, String quantidade, String data) async { //Função para realizar a rotina de testes para as OPs
-  int quantidadePecas = int.tryParse(quantidade) ?? 0;
-  TestePage testePage = TestePage(); 
+  Future<void> _realizarTeste(
+      BuildContext context, String op, String quantidade, String data) async {
+    int quantidadePecas = int.tryParse(quantidade) ?? 0;
+    TestePage testePage = TestePage();
 
-  for (int i = 0; i < quantidadePecas; i++) { //enquanto a variavel i for menor que a quantidade de peças indicadas pelo QrCode, o sistema autoriza os testes 
-    // Mostrar o diálogo antes de iniciar cada teste
-    bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
-    
-    if (!proceedWithTest) {
-      // Se o usuário escolher interromper o teste, sair do loop
-      break;
+    for (int i = 0; i < quantidadePecas; i++) {
+      bool proceedWithTest = await _showTestDialog(context, i + 1, quantidadePecas);
+
+      if (!proceedWithTest) {
+        break;
+      }
+
+      await Future.delayed(Duration(seconds: 1));
+      await testePage.sendCommand(context, true);
+      await Future.delayed(Duration(seconds: 1));
+      final sensorData = await testePage.fetchSensorData(context);
+      await testePage.sendCommand(context, false);
+      await Future.delayed(Duration(seconds: 1));
+      await testePage.sendCommand(context, true);
+      await Future.delayed(Duration(seconds: 1));
+      await testePage.sendCommand(context, false);
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Teste Concluído'),
+            content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
+            actions: [
+              ElevatedButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+      await Future.delayed(Duration(seconds: 1));
     }
 
-    // Aguardar um tempo antes de iniciar o teste da peça
-    await Future.delayed(Duration(seconds: 1));
-
-    // Acionar o relé
-    await testePage.sendCommand(context, true);
-
-    // Aguardar um tempo antes de verificar o sensor após o acionamento do relé
-    await Future.delayed(Duration(seconds: 1));
-
-    // Verificar o sensor após o acionamento do relé
-    // ignore: unused_local_variable
-    final sensorData = await testePage.fetchSensorData(context);
-
-    // Desacionar o relé
-    await testePage.sendCommand(context, false);
-
-    // Aguardar um tempo antes de continuar com a próxima peça
-    await Future.delayed(Duration(seconds: 1));
-
-    // Acionar o relé novamente
-    await testePage.sendCommand(context, true);
-
-    // Aguardar um tempo antes de verificar o sensor após o segundo acionamento do relé
-    await Future.delayed(Duration(seconds: 1));
-
-    // Desacionar o relé novamente
-    await testePage.sendCommand(context, false);
-
-   // Mostrar diálogo ao concluir o teste da peça
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Teste Concluído'),
-          content: Text('Teste da peça ${i + 1} concluído com sucesso.'),
+          title: const Text('Testes Concluídos'),
+          content: const Text('Todos os testes foram concluídos com sucesso.'),
           actions: [
             ElevatedButton(
               child: const Text('OK'),
@@ -216,93 +220,45 @@ Future<void> _realizarTeste(BuildContext context, String op, String quantidade, 
         );
       },
     );
-
-    // Aguardar um tempo antes de continuar com a próxima peça
-    await Future.delayed(Duration(seconds: 1));
   }
 
-  // Após concluir todos os testes, mostrar o diálogo de conclusão
-  showDialog( //dialogo para informar o usuario de que os tesets foram concluidos 
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Testes Concluídos'),
-        content: const Text('Todos os testes foram concluídos com sucesso.'),
-        actions: [
-          ElevatedButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+  Future<bool> _showTestDialog(
+      BuildContext context, int currentPiece, int totalPieces) async {
+    bool proceedWithTest = false;
 
-Future<bool> _showTestDialog(BuildContext context, int currentPiece, int totalPieces) async { //dialogo entre teste de cada peça para confirmação do operador 
-  bool proceedWithTest = false;
-
-  await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Testando Peça $currentPiece de $totalPieces'),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Iniciando o teste da peça $currentPiece...'),
-            Text('Deseja prosseguir com o teste?'),
-          ],
-        ),
-        actions: [
-          ElevatedButton(
-            child: const Text('Sim'),
-            onPressed: () {
-              Navigator.of(context).pop(true); // Indica que o teste deve prosseguir
-            },
-          ),
-          ElevatedButton(
-            child: const Text('Não'),
-            onPressed: () {
-              Navigator.of(context).pop(false); // Indica que o teste deve ser interrompido
-            },
-          ),
-        ],
-      );
-    },
-  ).then((value) {
-    proceedWithTest = value ?? false;
-  });
-
-  return proceedWithTest;
-}
-
-  Future<void> _showPieceTestedDialog(BuildContext context, int currentPiece, int totalPieces, String sensorData) async { //dialogo mostrando para o operador que todas as peças da OP foram testadas 
-    return showDialog(
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Teste da Peça $currentPiece Concluído'),
+          title: Text('Testando Peça $currentPiece de $totalPieces'),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Peça $currentPiece de $totalPieces foi testada.'),
-              Text('Dados do Sensor: $sensorData'),
+              Text('Iniciando o teste da peça $currentPiece...'),
+              Text('Deseja prosseguir com o teste?'),
             ],
           ),
           actions: [
             ElevatedButton(
-              child: const Text('OK'),
+              child: const Text('Sim'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(true);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Não'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
               },
             ),
           ],
         );
       },
-    );
+    ).then((value) {
+      proceedWithTest = value ?? false;
+    });
+
+    return proceedWithTest;
   }
 
   @override
